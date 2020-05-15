@@ -137,7 +137,7 @@ class RTemplates:  # pylint: disable=too-many-public-methods
 
         :return: list of strings with names of packages
         """
-        packages = []
+        packages = ["utf8"]
 
         if self.auto_load_packages:
             if self.use_sf:
@@ -168,10 +168,21 @@ class RTemplates:  # pylint: disable=too-many-public-methods
         command = ""
 
         if layer is not None:
-            command = '{0} <- st_read("{1}", layer = "{2}", quiet = TRUE, stringsAsFactors = FALSE)'.format(variable,
-                                                                                                            path, layer)
+            command = 'layer_path <- "{1}"\n' \
+                      'Encoding(layer_path) <- "bytes"\n' \
+                      'layer_name <- "{2}"\n' \
+                      'Encoding(layer_name) <- "bytes"\n' \
+                      '{0} <- st_read(as_utf8(layer_path), layer = as_utf8(layer_name), ' \
+                                      'quiet = TRUE, stringsAsFactors = FALSE)'.format(variable,
+                                                                                       repr(path.encode())[2:-1],
+                                                                                       repr(layer.encode())[2:-1])
+
         else:
-            command = '{0} <- st_read("{1}", quiet = TRUE, stringsAsFactors = FALSE)'.format(variable, path)
+            command = 'layer_path <- "{1}"\n' \
+                      'Encoding(layer_path) <- "bytes"\n' \
+                      '{0} <- st_read("as_utf8(layer_path)", ' \
+                                      'quiet = TRUE, stringsAsFactors = FALSE)'.format(variable,
+                                                                                       repr(path.encode())[2:-1])
 
         return command
 
