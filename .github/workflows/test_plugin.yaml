@@ -43,16 +43,8 @@ jobs:
           docker exec qgis-testing-environment sh -c "apt-get install -y r-base"
 
       - name: Docker run plugin tests
-        id: test_plugin
-        shell: bash
         run: |
-          TEST_RESULT="$(docker exec qgis-testing-environment sh -c 'qgis_testrunner.sh $TESTS_RUN_FUNCTION')"
-          TEST_RESULT="${TEST_RESULT//'%'/'%25'}"
-          TEST_RESULT="${TEST_RESULT//$'\n'/'%0A'}"
-          TEST_RESULT="${TEST_RESULT//$'\r'/'%0D'}"
-          echo $TEST_RESULT
-          echo "::set-env name=TEST_RESULT::$TEST_RESULT"
-          docker exec qgis-testing-environment sh -c 'qgis_testrunner.sh $TESTS_RUN_FUNCTION'
+          docker exec qgis-testing-environment sh -c "qgis_testrunner.sh $TESTS_RUN_FUNCTION"
 
       - uses: JasonEtco/create-an-issue@v2
         if: ${{ failure() }}
@@ -60,7 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WORKFLOW: build-package
           DOCKER_TAG: ${{ matrix.docker_tags }}
-          TEST_RESULT: ${{ steps.test_plugin.outputs.TEST_RESULT }}
         with:
           filename: .github/workflow-fail-template.md
 
