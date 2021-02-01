@@ -45,7 +45,7 @@ jobs:
       - name: Docker run plugin tests
         id: test_plugin
         run: |
-          echo '::set-output name=test_result::docker exec qgis-testing-environment sh -c "qgis_testrunner.sh $TESTS_RUN_FUNCTION"'
+          echo '##[set-output name=test_result;]$(docker exec qgis-testing-environment sh -c "qgis_testrunner.sh $TESTS_RUN_FUNCTION")'
           docker exec qgis-testing-environment sh -c "qgis_testrunner.sh $TESTS_RUN_FUNCTION"
 
       - uses: JasonEtco/create-an-issue@v2
