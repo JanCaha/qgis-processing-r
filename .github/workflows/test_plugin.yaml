@@ -45,8 +45,8 @@ jobs:
       - name: Docker run plugin tests
         id: test_plugin
         run: |
-          echo '##[set-output name=test_result;]$(docker exec qgis-testing-environment sh -c "qgis_testrunner.sh $TESTS_RUN_FUNCTION")'
-          docker exec qgis-testing-environment sh -c "qgis_testrunner.sh $TESTS_RUN_FUNCTION"
+          echo "::set-output name=TEST_RESULT::$(docker exec qgis-testing-environment sh -c 'qgis_testrunner.sh $TESTS_RUN_FUNCTION')"
+          docker exec qgis-testing-environment sh -c 'qgis_testrunner.sh $TESTS_RUN_FUNCTION'
 
       - uses: JasonEtco/create-an-issue@v2
         if: ${{ failure() }}
@@ -54,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WORKFLOW: build-package
           DOCKER_TAG: ${{ matrix.docker_tags }}
-          TEST_RESULT: ${{ steps.test_plugin.outputs.test_result }}
+          TEST_RESULT: ${{ steps.test_plugin.outputs.TEST_RESULT }}
         with:
           filename: .github/workflow-fail-template.md
 
