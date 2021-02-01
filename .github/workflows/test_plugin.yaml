@@ -16,7 +16,7 @@ env:
 
 
 jobs:
-  my_job:
+  Test-plugin-Processing-R:
     runs-on: ubuntu-latest
 
     strategy:
