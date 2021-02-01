@@ -397,6 +397,7 @@ class AlgorithmTest(unittest.TestCase):
         self.assertIn('Me2', alg.shortHelpString())
         self.assertIn('Test help.', alg.shortHelpString())
 
+        self.assertFalse(True)
         # param help
         # if Qgis.QGIS_VERSION_INT >= 31600:
         #     polyg_param = alg.parameterDefinition('polyg')
